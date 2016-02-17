@@ -1,0 +1,144 @@
+diff --git a/usr/share/sailfish-browser/pages/components/SecondaryBar.qml b/usr/share/sailfish-browser/pages/components/SecondaryBar.qml
+index 9e3f171..3d08e29 100644
+--- a/usr/share/sailfish-browser/pages/components/SecondaryBar.qml
++++ b/usr/share/sailfish-browser/pages/components/SecondaryBar.qml
+@@ -20,7 +20,7 @@ Item {
+     property bool bookmarked
+     property int horizontalOffset
+     property int iconWidth
+-    property real midIconWidth: iconWidth + (iconWidth - forwardButton.width) / 3
++    property real midIconWidth: iconWidth + (iconWidth) / 3
+ 
+     width: parent.width
+     height: isPortrait ? Settings.toolbarLarge : Settings.toolbarSmall
+@@ -38,18 +38,10 @@ Item {
+             onTapped: enterNewTabUrl()
+         }
+ 
+-        Browser.ExpandingButton {
+-            id: forwardButton
+-            expandedWidth: iconWidth
+-            icon.source: "image://theme/icon-m-forward"
+-            active: webView.canGoForward
+-            onTapped: webView.goForward()
+-        }
+-
+         // Spacer for pushing Search, Favorite, Share, Downloads to the right hand side
+         Item {
+             height: parent.height
+-            width: parent.width - addTabButton.width - forwardButton.width - midIconWidth * 3 - downloadsButton.width
++            width: parent.width - addTabButton.width - midIconWidth * 3 - downloadsButton.width
+         }
+ 
+         Browser.IconButton {
+diff --git a/usr/share/sailfish-browser/pages/components/ToolBar.qml b/usr/share/sailfish-browser/pages/components/ToolBar.qml
+index 5ee1fcb..084048e 100644
+--- a/usr/share/sailfish-browser/pages/components/ToolBar.qml
++++ b/usr/share/sailfish-browser/pages/components/ToolBar.qml
+@@ -92,6 +92,36 @@ Column {
+         width: parent.width
+         height: isPortrait ? scaledPortraitHeight : scaledLandscapeHeight
+ 
++        Item {
++            opacity: webView.canGoBack ? 1 : 0
++            GlassItem {
++                anchors {
++                    horizontalCenter: parent.left
++                }
++
++                color: Theme.primaryColor
++                radius: 0.22
++                falloffRadius: 0.18
++                clip: true
++            }
++        }
++
++        Item {
++            opacity: webView.canGoForward ? 1 : 0
++            x: menuButton.x + menuButton.width
++
++            GlassItem {
++                anchors {
++                    horizontalCenter: parent.right
++                }
++
++                color: Theme.primaryColor
++                radius: 0.22
++                falloffRadius: 0.18
++                clip: true
++            }
++        }
++
+         // Container item for cross fading tabs, close, find in page button (and keep Row's width still).
+         Item {
+             id: tabButton
+@@ -153,21 +183,13 @@ Column {
+             }
+         }
+ 
+-        Browser.ExpandingButton {
+-            id: backIcon
+-            expandedWidth: toolsRow.iconWidth
+-            icon.source: "image://theme/icon-m-back"
+-            active: webView.canGoBack && !toolBarRow.secondaryToolsActive && !findInPageActive
+-            onTapped: webView.goBack()
+-        }
+-
+         MouseArea {
+             id: touchArea
+ 
+             readonly property bool down: pressed && containsMouse
+ 
+             height: parent.height
+-            width: toolBarRow.width - (tabButton.width + reloadButton.width + backIcon.width + menuButton.width)
++            width: toolBarRow.width - (tabButton.width + reloadButton.width + menuButton.width)
+             enabled: !showFindButtons
+ 
+             onClicked: {
+@@ -178,6 +200,46 @@ Column {
+                 }
+             }
+ 
++            readonly property int posX: toolBarRow.x + tabButton.width
++
++            drag.target: toolBarRow.secondaryToolsActive ? null : touchArea
++            drag.axis: Drag.XAxis
++            drag.minimumX: webView.canGoForward ? 0 : posX
++            drag.maximumX: webView.canGoBack ? toolBarRow.width : posX
++
++            drag.onActiveChanged: {
++                if (!drag.active) {
++                    if (x > (posX + width) / 3) {
++                        webView.goBack()
++                    } else if (x < posX / 3) {
++                        webView.goForward()
++                    }
++
++                    state = "default"
++                }
++            }
++
++            state: "default"
++
++            states: [
++                State {
++                    name: "default"
++                    when: !touchArea.drag.active
++                }
++            ]
++
++            transitions: [
++                Transition {
++                    to: "default"
++                    NumberAnimation {
++                        target: touchArea
++                        properties: "x"
++                        to: touchArea.posX
++                        duration: 200
++                    }
++                }
++            ]
++
+             Label {
+                 anchors.verticalCenter: parent.verticalCenter
+                 width: parent.width + Theme.paddingMedium

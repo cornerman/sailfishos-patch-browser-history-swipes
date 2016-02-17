@@ -1,0 +1,8 @@
+{
+    "name": "Browser History Swipes",
+    "description": "Swipe URL in browser toolbar right/left in order to go back/forward",
+    "category": "browser",
+    "infos": {
+        "maintainer": "cornerman"
+    }
+}
