@@ -32,23 +32,25 @@ index 9e3f171..3d08e29 100644
  
          Browser.IconButton {
 diff --git a/usr/share/sailfish-browser/pages/components/ToolBar.qml b/usr/share/sailfish-browser/pages/components/ToolBar.qml
-index 5ee1fcb..084048e 100644
+index 5ee1fcb..232d876 100644
 --- a/usr/share/sailfish-browser/pages/components/ToolBar.qml
 +++ b/usr/share/sailfish-browser/pages/components/ToolBar.qml
-@@ -92,6 +92,36 @@ Column {
+@@ -92,6 +92,39 @@ Column {
          width: parent.width
          height: isPortrait ? scaledPortraitHeight : scaledLandscapeHeight
  
 +        Item {
 +            opacity: webView.canGoBack ? 1 : 0
++            height: parent.height
++
 +            GlassItem {
 +                anchors {
 +                    horizontalCenter: parent.left
++                    verticalCenter: parent.verticalCenter
 +                }
 +
 +                color: Theme.primaryColor
-+                radius: 0.22
-+                falloffRadius: 0.18
++                radius: 0.12
 +                clip: true
 +            }
 +        }
@@ -56,15 +58,16 @@ index 5ee1fcb..084048e 100644
 +        Item {
 +            opacity: webView.canGoForward ? 1 : 0
 +            x: menuButton.x + menuButton.width
++            height: parent.height
 +
 +            GlassItem {
 +                anchors {
 +                    horizontalCenter: parent.right
++                    verticalCenter: parent.verticalCenter
 +                }
 +
 +                color: Theme.primaryColor
-+                radius: 0.22
-+                falloffRadius: 0.18
++                radius: 0.12
 +                clip: true
 +            }
 +        }
@@ -72,7 +75,7 @@ index 5ee1fcb..084048e 100644
          // Container item for cross fading tabs, close, find in page button (and keep Row's width still).
          Item {
              id: tabButton
-@@ -153,21 +183,13 @@ Column {
+@@ -153,21 +186,13 @@ Column {
              }
          }
  
@@ -95,7 +98,7 @@ index 5ee1fcb..084048e 100644
              enabled: !showFindButtons
  
              onClicked: {
-@@ -178,6 +200,46 @@ Column {
+@@ -178,6 +203,46 @@ Column {
                  }
              }
  
