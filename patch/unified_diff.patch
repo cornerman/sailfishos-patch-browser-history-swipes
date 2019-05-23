@@ -1,8 +1,6 @@
-diff --git a/usr/share/sailfish-browser/pages/components/SecondaryBar.qml b/usr/share/sailfish-browser/pages/components/SecondaryBar.qml
-index 9e3f171..3d08e29 100644
 --- a/usr/share/sailfish-browser/pages/components/SecondaryBar.qml
 +++ b/usr/share/sailfish-browser/pages/components/SecondaryBar.qml
-@@ -20,7 +20,7 @@ Item {
+@@ -20,7 +20,7 @@
      property bool bookmarked
      property int horizontalOffset
      property int iconWidth
@@ -11,7 +9,7 @@ index 9e3f171..3d08e29 100644
  
      width: parent.width
      height: isPortrait ? Settings.toolbarLarge : Settings.toolbarSmall
-@@ -38,18 +38,10 @@ Item {
+@@ -38,18 +38,10 @@
              onTapped: enterNewTabUrl()
          }
  
@@ -31,13 +29,11 @@ index 9e3f171..3d08e29 100644
          }
  
          Browser.IconButton {
-diff --git a/usr/share/sailfish-browser/pages/components/ToolBar.qml b/usr/share/sailfish-browser/pages/components/ToolBar.qml
-index 5ee1fcb..232d876 100644
 --- a/usr/share/sailfish-browser/pages/components/ToolBar.qml
 +++ b/usr/share/sailfish-browser/pages/components/ToolBar.qml
-@@ -92,6 +92,39 @@ Column {
+@@ -93,6 +93,39 @@
          width: parent.width
-         height: isPortrait ? scaledPortraitHeight : scaledLandscapeHeight
+         height: browserPage.isPortrait ? scaledPortraitHeight : scaledLandscapeHeight
  
 +        Item {
 +            opacity: webView.canGoBack ? 1 : 0
@@ -75,13 +71,13 @@ index 5ee1fcb..232d876 100644
          // Container item for cross fading tabs, close, find in page button (and keep Row's width still).
          Item {
              id: tabButton
-@@ -153,21 +186,13 @@ Column {
+@@ -154,21 +187,13 @@
              }
          }
  
 -        Browser.ExpandingButton {
 -            id: backIcon
--            expandedWidth: toolsRow.iconWidth
+-            expandedWidth: toolBarRow.iconWidth
 -            icon.source: "image://theme/icon-m-back"
 -            active: webView.canGoBack && !toolBarRow.secondaryToolsActive && !findInPageActive
 -            onTapped: webView.goBack()
@@ -98,10 +94,11 @@ index 5ee1fcb..232d876 100644
              enabled: !showFindButtons
  
              onClicked: {
-@@ -178,6 +203,46 @@ Column {
+@@ -178,6 +203,46 @@
+                     toolBarRow.showOverlay()
                  }
              }
- 
++
 +            readonly property int posX: toolBarRow.x + tabButton.width
 +
 +            drag.target: toolBarRow.secondaryToolsActive ? null : touchArea
@@ -141,7 +138,6 @@ index 5ee1fcb..232d876 100644
 +                    }
 +                }
 +            ]
-+
+ 
              Label {
                  anchors.verticalCenter: parent.verticalCenter
-                 width: parent.width + Theme.paddingMedium

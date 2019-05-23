@@ -7,3 +7,5 @@ Adds indicators on both sides of the toolbar to show whether you can go back res
 The two buttons for history control are removed.
 
 Currently very simplistic and only the URL is swipable.
+
+As of version 0.0.3 works with sailfish-browser from SailfishOS 3.0.3.9 (Hossa)

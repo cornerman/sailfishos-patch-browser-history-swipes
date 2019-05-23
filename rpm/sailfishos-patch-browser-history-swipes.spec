@@ -1,13 +1,13 @@
 Name:       sailfishos-patch-browser-history-swipes
 BuildArch:  noarch
 Summary:    Swipe URL in browser toolbar right/left in order to go back/forward
-Version:    0.0.2
+Version:    0.0.3
 Release:    1
 Group:      System/Patches
 License:    TODO
 Source0:    %{name}-%{version}.tar.xz
 Requires:   patchmanager
-Requires:   sailfish-browser >= 1.13.55.1
+Requires:   sailfish-browser >= 1.15.12
 
 %description
 %{summary}
